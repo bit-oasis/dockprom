@@ -5,7 +5,6 @@ receivers:
     - name: 'slack'
       slack_configs:
           - send_resolved: true
-            text: "{{ .CommonAnnotations.description }}"
-            username: 'Prometheus'
-            channel: '#<channel-name>'
-            api_url: 'https://hooks.slack.com/services/<webhook-id>'
+            text: "{{ range .Alerts }}**[{{ .Status }}]** {{ .Annotations.summary }}\n{{ .Annotations.description }}\n\n{{ end }}"
+            channel: '#temp-for-testing-only'
+            api_url: 'https://hooks.slack.com/services/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'

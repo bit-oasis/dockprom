@@ -34,6 +34,54 @@ scrape_configs:
     static_configs:
       - targets: ['pushgateway:9091']
 
+  - job_name: 'exchange-api-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8090']
+
+  - job_name: 'user-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8096']
+
+  - job_name: 'balance-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8092']
+
+  - job_name: 'matching-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8093']
+
+  - job_name: 'settle-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8094']
+
+  - job_name: 'kafka-persistor'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8095']
+
+  - job_name: 'data-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+      - targets: ['docker.for.mac.localhost:8099']
 
 alerting:
   alertmanagers:

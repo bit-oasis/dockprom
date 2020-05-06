@@ -67,6 +67,17 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
+  blackbox_exporter:
+    image: prom/blackbox-exporter:master
+    container_name: blackbox_exporter
+    restart: unless-stopped
+    expose:
+      - 9115
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
   cadvisor:
     image: gcr.io/google-containers/cadvisor:v0.36.0
     container_name: cadvisor
@@ -121,6 +132,7 @@ services:
       - "9090:9090"
       - "9093:9093"
       - "9091:9091"
+      - "9115:9115"
     volumes:
       - ./caddy:/etc/caddy
     environment:

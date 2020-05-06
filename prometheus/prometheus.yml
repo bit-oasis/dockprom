@@ -34,6 +34,40 @@ scrape_configs:
     static_configs:
       - targets: ['pushgateway:9091']
 
+  - job_name: blackbox
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: [http://docker.for.mac.localhost:8090/actuator/health]
+        labels:
+          name: 'exchange'
+      - targets: [http://docker.for.mac.localhost:8092/actuator/health]
+        labels:
+          name: 'balance'
+      - targets: [http://docker.for.mac.localhost:8093/actuator/health]
+        labels:
+          name: 'matching'
+      - targets: [http://docker.for.mac.localhost:8094/actuator/health]
+        labels:
+          name: 'settle'
+      - targets: [http://docker.for.mac.localhost:8095/actuator/health]
+        labels:
+          name: 'persistor'
+      - targets: [http://docker.for.mac.localhost:8096/actuator/health]
+        labels:
+          name: 'user'
+      - targets: [http://docker.for.mac.localhost:8099/actuator/health]
+        labels:
+          name: 'data'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: docker.for.mac.localhost:9115 # Blackbox exporter.
+
   - job_name: 'exchange-api-service'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 5s

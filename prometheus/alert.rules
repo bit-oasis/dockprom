@@ -41,30 +41,148 @@ groups:
 
 - name: containers
   rules:
-  - alert: exchange_api_service_down
-    expr: absent(container_memory_usage_bytes{name="exchange-api-service"})
+  - alert: exchange_container_down
+    expr: absent(container_memory_usage_bytes{name="microservices_exchange_1"})
     for: 30s
     labels:
       severity: critical
     annotations:
-      summary: "Exchange API Service down"
-      description: "Exchange API Service container is down for more than 30 seconds."
+      summary: "Exchange container down"
+      description: "Exchange container is down for more than 30 seconds."
 
-  - alert: exchange_api_service_high_cpu
-    expr: sum(rate(container_cpu_usage_seconds_total{name="exchange-api-service"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
+  - alert: exchange_container_high_cpu
+    expr: sum(rate(container_cpu_usage_seconds_total{name="microservices_exchange_1"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
     for: 30s
     labels:
       severity: warning
     annotations:
-      summary: "Exchange API Service high CPU usage"
-      description: "Exchange API Service CPU usage is {{ humanize $value}}%."
+      summary: "Exchange container high CPU usage"
+      description: "Exchange container CPU usage is {{ humanize $value}}%."
 
-  - alert: exchange_api_service_high_memory
-    expr: sum(container_memory_usage_bytes{name="exchange-api-service"}) > 1200000000
+  - alert: exchange_container_high_memory
+    expr: sum(container_memory_usage_bytes{name="microservices_exchange_1"}) > 1200000000
     for: 30s
     labels:
       severity: warning
     annotations:
-      summary: "Exchange API Service high memory usage"
-      description: "Exchange API Service memory consumption is at {{ humanize $value}}."
+      summary: "Exchange container high memory usage"
+      description: "Exchange container memory consumption is at {{ humanize $value}}."
 
+  - alert: matching_container_down
+    expr: absent(container_memory_usage_bytes{name="microservices_matching_1"})
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Matching container down"
+      description: "Matching container is down for more than 30 seconds."
+
+  - alert: matching_container_high_cpu
+    expr: sum(rate(container_cpu_usage_seconds_total{name="microservices_matching_1"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "Matching container high CPU usage"
+      description: "Matching container CPU usage is {{ humanize $value}}%."
+
+  - alert: matching_container_high_memory
+    expr: sum(container_memory_usage_bytes{name="microservices_matching_1"}) > 1200000000
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "Matching container high memory usage"
+      description: "Matching container memory consumption is at {{ humanize $value}}."
+
+  - alert: data_container_down
+    expr: absent(container_memory_usage_bytes{name="microservices_data_1"})
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Data container down"
+      description: "Data container is down for more than 30 seconds."
+
+  - alert: data_container_high_cpu
+    expr: sum(rate(container_cpu_usage_seconds_total{name="microservices_data_1"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "Data container high CPU usage"
+      description: "Data container CPU usage is {{ humanize $value}}%."
+
+  - alert: data_container_high_memory
+    expr: sum(container_memory_usage_bytes{name="microservices_data_1"}) > 1200000000
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "Data container high memory usage"
+      description: "Data container memory consumption is at {{ humanize $value}}."
+
+- name: services
+  rules:
+  - alert: exchange_service_down
+    expr: probe_success{name="exchange"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Exchange service down"
+      description: "Exchange service is down for more than 30 seconds."
+
+  - alert: balance_service_down
+    expr: probe_success{name="balance"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Balance service down"
+      description: "Balance service is down for more than 30 seconds."
+
+  - alert: matching_service_down
+    expr: probe_success{name="matching"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Matching service down"
+      description: "Matching service is down for more than 30 seconds."
+
+  - alert: settle_service_down
+    expr: probe_success{name="settle"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Settle service down"
+      description: "Settle service is down for more than 30 seconds."
+
+  - alert: persistor_service_down
+    expr: probe_success{name="persistor"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Persistor service down"
+      description: "Persistor service is down for more than 30 seconds."
+
+  - alert: user_service_down
+    expr: probe_success{name="user"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "User service down"
+      description: "User service is down for more than 30 seconds."
+
+  - alert: data_service_down
+    expr: probe_success{name="data"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Data service down"
+      description: "Data service is down for more than 30 seconds."
